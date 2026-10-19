@@ -1,3 +1,4 @@
 marimo==0.25.1
+uv
 numpy>=1.26
 matplotlib>=3.8
