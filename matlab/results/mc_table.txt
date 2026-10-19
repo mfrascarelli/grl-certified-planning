@@ -1,0 +1,3 @@
+% domain & M & GRL cert. & GRL succ. & crit.ok & margin(med) & len/LB & minsep & time | HFM ok & cross & len/LB & time | APF succ & coll & pen & len/LB
+mc_flagship.mat & 50 & 100\% & 100\% & 100\% & 0.65 & 1.15 & 0.134 & 17.9 & 100\% & 26\% & 1.06 & 23.1 & 24\% & 0\% & 0\% & 1.12 \\
+mc_warehouse.mat & 50 & 100\% & 100\% & 100\% & 0.47 & 1.13 & 0.138 & 38.5 & 100\% & 16\% & 1.03 & 24.3 & 4\% & 0\% & 0\% & 0.99 \\
