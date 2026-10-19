@@ -337,14 +337,16 @@ def _(functools, np):
                 break
         return np.array(pts), np.array(flags), hit, end
 
-    def argument_principle_count(pot, circles, n_orig, m=4096):
+    def argument_principle_count(pot, circles, n_orig, m=4096, shift=0.01):
         """#zeros of Omega' in D = #poles of Omega' in D + (1/2 pi j) oint_{dD} Omega''/Omega' dz.
-        Outer circle counter-clockwise, obstacles clockwise; Omega' has the 2N original simple poles in D."""
+        Outer circle counter-clockwise, obstacles clockwise; Omega' has the 2N original simple poles in D.
+        The contour is moved by `shift` into D, so that zeros of Omega' on dD (stagnation points) are not on it."""
         t = np.linspace(0, 2 * np.pi, m, endpoint=False)
         total = 0.0
         for C in circles:
-            w = C["c"] + C["r"] * np.exp(1j * t)
-            val = np.mean(pot.d2Om(w) / pot.dOm(w) * C["r"] * np.exp(1j * t))
+            r = C["r"] - shift if C["outer"] else C["r"] + shift
+            w = C["c"] + r * np.exp(1j * t)
+            val = np.mean(pot.d2Om(w) / pot.dOm(w) * r * np.exp(1j * t))
             total += (1 if C["outer"] else -1) * val.real
         return 2 * n_orig + total
 
@@ -1483,22 +1485,26 @@ def _(mo):
     **Completeness of step 3.** $\Omega'$ has exactly $2N$ simple poles in $D$, the original starts and goals. By
     the argument principle,
     $$\#\{\Omega'=0 \text{ in } D\}=2N+\frac{1}{2\pi j}\oint_{\partial D}\frac{\Omega''}{\Omega'}\,dz ,$$
-    with the outer circle counter-clockwise and the obstacles clockwise. The table checks this count against the
-    Newton search for the scenario selected in Section 6.
+    with the outer circle counter-clockwise and the obstacles clockwise. The principle requires $\Omega'\neq0$ on
+    the contour. A zero $b\in\partial D$ (a stagnation point, typical when a circle is a streamline, e.g. the disk
+    scenario with reflections) gives the phase $\pi-\arg R(b)\in\Theta_\partial$, which is already excluded; the
+    contour is then moved slightly into $D$. The table checks this count against the Newton search for the
+    scenario selected in Section 6.
     """)
     return
 
 
 @app.cell(hide_code=True)
-def _(P6, argument_principle_count, circles6, crit6, mo):
-    _cnt = argument_principle_count(P6, circles6, P6.n_orig)
-    _ok = abs(round(_cnt) - len(crit6)) == 0 and abs(_cnt - round(_cnt)) < 1e-6
+def _(P6, argument_principle_count, circles6, crit6, inside6, mo):
+    _cnt = argument_principle_count(P6, circles6, P6.n_orig, shift=0.01)
+    _n_in = int(inside6(crit6, 0.01).sum()) if len(crit6) else 0
+    _ok = abs(round(_cnt) - _n_in) == 0 and abs(_cnt - round(_cnt)) < 1e-6
     mo.vstack(
         [
             mo.md(
                 f"| quantity | value |\n|---|---|\n"
                 f"| singularities of $R$ (originals + images) | {len(P6.Z) + len(P6.P)} |\n"
-                f"| critical points found by Newton in $D$ | **{len(crit6)}** |\n"
+                f"| critical points found by Newton in $D$ (at distance > 0.01 from $\\partial D$) | **{_n_in}** |\n"
                 f"| argument-principle count | **{_cnt:.6f}** |"
             ),
             mo.callout(
