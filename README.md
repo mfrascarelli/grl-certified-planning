@@ -51,3 +51,13 @@ mc_summary({'results/mc_flagship.mat','results/mc_warehouse.mat'})   % Monte Car
 ```
 
 No toolbox is needed: starts, goals and circles of the canonical domain are stored in `matlab/data/`.
+
+## Examples
+
+- `examples/ten_robots_ten_obstacles/` – the *Forest* example of the extended version
+  (10 robots, 10 circular obstacles, reflection depth 3). Python/NumPy; see the README in that folder.
+
+## Extended version
+
+M. Frascarelli, L. Pallottino, A. Landi, *Extending Harmonic Function Methods via Root Locus
+for Coordinated Path Generation*, arXiv preprint (2026).
