@@ -37,7 +37,7 @@ The saved results of the paper are in `results/` (`mc_*.mat`, `log_*.txt`, `mc_t
 | Domain | GRL certified / successful | Independent HFM: crossing paths | APF successful |
 |---|---|---|---|
 | Flagship | 100 % / 100 % | 26 % | 24 % |
-| Warehouse | 100 % / 100 % | 16 % | 4 % |
+| Warehouse | 100 % / 100 % | 22 % | 6 % |
 
 ## Files
 

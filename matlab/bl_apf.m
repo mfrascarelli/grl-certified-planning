@@ -33,6 +33,9 @@ for it = 1:T
     minclear = min(minclear, min(cl));
     if all(done), break; end
 end
+% count the final segment to the goal, so that L is the length of a path that
+% ends exactly at the goal (the loop stops within tol of it)
+L(done) = L(done) + abs(z(done) - gg(done));
 out.success = all(done); out.reached = sum(done); out.minsep = minsep;
 out.minclear = minclear; out.length = L.'; out.iters = it;
 out.collision = minsep < 0.01; out.penetration = minclear < 0;
